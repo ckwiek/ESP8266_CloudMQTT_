@@ -52,7 +52,7 @@
 const char* ssid = "rede"; //Aqui o nome da sua rede local wi fi
 const char* password =  "senha"; // Aqui a senha da sua rede local wi fi
 const char* mqttServer = "server"; // Aqui o endereço do seu servidor fornecido pelo site 
-const int mqttPort =12000; // Aqui mude para sua porta fornecida pelo site
+const int mqttPort = xxxxx // Aqui mude para sua porta fornecida pelo site
 const char* mqttUser = "usuario"; //  Aqui o nome de usuario fornecido pelo site
 const char* mqttPassword = "senha"; //  Aqui sua senha fornecida pelo site
 char EstadoSaida = '0';  
