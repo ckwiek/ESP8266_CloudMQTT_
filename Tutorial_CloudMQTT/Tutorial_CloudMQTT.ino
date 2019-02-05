@@ -18,14 +18,14 @@
  
 
 //-----------------------------------------wifi-----------------------------------------
-const char* ssid = "Valhalla"; //Aqui o nome da sua rede local wi fi
-const char* password =  "Lokiandthor"; // Aqui a senha da sua rede local wi fi
+const char* ssid = ""; //Aqui o nome da sua rede local wi fi
+const char* password =  ""; // Aqui a senha da sua rede local wi fi
 
 //-----------------------------------------api.cloudmqtt-----------------------------------------
-const char* mqttServer = "m13.cloudmqtt.com"; // Aqui o endereço do seu servidor fornecido pelo site 
-const int mqttPort = 14919; // Aqui mude para sua porta fornecida pelo site
-const char* mqttUser = "ystaukxs"; //  Aqui o nome de usuario fornecido pelo site
-const char* mqttPassword = "JFAKokLHQ0IV"; //  Aqui sua senha fornecida pelo site
+const char* mqttServer = ""; // Aqui o endereço do seu servidor fornecido pelo site 
+const int mqttPort = ; // Aqui mude para sua porta fornecida pelo site
+const char* mqttUser = ""; //  Aqui o nome de usuario fornecido pelo site
+const char* mqttPassword = ""; //  Aqui sua senha fornecida pelo site
 char EstadoSaida = '0';  
 WiFiClient espClient;
 PubSubClient client(espClient);
