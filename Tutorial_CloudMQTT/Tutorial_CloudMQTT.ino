@@ -255,7 +255,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
 }
  
 
-
+//conecta com o wifi
 void wifi(){
   
   WiFi.begin(ssid, password);
@@ -268,6 +268,7 @@ void wifi(){
   Serial.println(ssid);
 }
 
+//conecta com o wifi se perder conexão
 void reconectarWifi(){
   if (WiFi.status() != WL_CONNECTED){
     Serial.println("Conexão com wifi perdida");
@@ -282,6 +283,7 @@ void reconectarWifi(){
   }
 
 }
+//conecta com o cloudmqtt
 void cloudmqtt(){
   client.setServer(mqttServer, mqttPort);
   client.setCallback(callback);
