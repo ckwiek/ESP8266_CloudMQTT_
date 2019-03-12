@@ -1,4 +1,31 @@
 
+
+ /*///////////////////////////////////////////////////////////////////////////////////////////////////
+ *                                                                                                   /
+ * Este programa mostra como fazer uma aplicacao usando lingugem mqtt para ligar e desligar leds     /
+ * Usando um ESP8266-12E                                                                             /
+ * Foi utilizado o site IoT https://www.cloudmqtt.com/                                             /
+ * O tutorial deste e de outras aplicações didaticas estão disponiveis no meu website                /
+ * ///////////////////////////////////////////////////////////////////////////////////////////////////
+ * 
+ * //////////////////////////////////////////
+ * www.carloskwiek.com.br                ////
+ * e-mail contato@carloskwiek.com.br ////
+ * /////////////////////////////////////////
+ * /////////
+ * ENGLISH /
+ * ////////////////////////////////////////////////////////////
+ * The comments of the code are written in portuguese          /
+ * I am an electronics engineer and I live in Brazil,          /
+ * If you have any questions, please                           /
+ * Contact me via e-mail.                                       /
+ * /////////////////////////////////////////////////////////////
+ * 
+ * ////////////////////////////////////////////////////////////////////////////
+ * Sobre o autor: Engenheiro eletronico enstusista de todo tipo de tecnologia./
+*/////////////////////////////////////////////////////////////////////////////
+
+
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h> 
 //Define a pinagem do ESP8266
