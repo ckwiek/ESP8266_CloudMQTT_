@@ -1,37 +1,5 @@
-
-
-
- /*///////////////////////////////////////////////////////////////////////////////////////////////////
- *                                                                                                   /
- * Este programa mostra como fazer uma aplicacao usando lingugem mqtt para ligar e desligar leds     /
- * Usando um ESP8266-12E                                                                             /
- * Foi utilizado o site IoT https://www.cloudmqtt.com/                                             /
- * O tutorial deste e de outras aplicações didaticas estão disponiveis no meu website                /
- * ///////////////////////////////////////////////////////////////////////////////////////////////////
- * 
- * //////////////////////////////////////////
- * www.carloskwiek.com.br                ////
- * e-mail contato@carloskwiek.com.br ////
- * /////////////////////////////////////////
- * /////////
- * ENGLISH /
- * ////////////////////////////////////////////////////////////
- * The comments of the code are written in portuguese          /
- * I am an electronics engineer and I live in Brazil,          /
- * If you have any questions, please                           /
- * Contact me via e-mail.                                       /
- * /////////////////////////////////////////////////////////////
- * 
- * ////////////////////////////////////////////////////////////////////////////
- * Sobre o autor: Engenheiro eletronico enstusista de todo tipo de tecnologia./
-*/////////////////////////////////////////////////////////////////////////////
-
-
-
 #include <ESP8266WiFi.h>
-#include <PubSubClient.h> // Biblioteca usada, baixe e instale se não a tiver, link abaixo
-                          //https://github.com/knolleary/pubsubclient/blob/master/examples/mqtt_esp8266/mqtt_esp8266.ino
-
+#include <PubSubClient.h> 
 //Define a pinagem do ESP8266
 
 #define D0    16
@@ -46,22 +14,20 @@
 #define D9    3
 #define D10   1
 
- 
+//-----------------------------------------wifi-----------------------------------------
+const char* ssid = ""; //Aqui o nome da sua rede local wi fi
+const char* password =  ""; // Aqui a senha da sua rede local wi fi
 
- 
-const char* ssid = "rede"; //Aqui o nome da sua rede local wi fi
-const char* password =  "senha"; // Aqui a senha da sua rede local wi fi
-const char* mqttServer = "server"; // Aqui o endereço do seu servidor fornecido pelo site 
-const int mqttPort = xxxxx // Aqui mude para sua porta fornecida pelo site
-const char* mqttUser = "usuario"; //  Aqui o nome de usuario fornecido pelo site
-const char* mqttPassword = "senha"; //  Aqui sua senha fornecida pelo site
+//-----------------------------------------api.cloudmqtt-----------------------------------------
+const char* mqttServer = ""; // Aqui o endereço do seu servidor fornecido pelo site 
+const int mqttPort = ; // Aqui mude para sua porta fornecida pelo site
+const char* mqttUser = ""; //  Aqui o nome de usuario fornecido pelo site
+const char* mqttPassword = ""; //  Aqui sua senha fornecida pelo site
 char EstadoSaida = '0';  
 WiFiClient espClient;
 PubSubClient client(espClient);
 
-
 void mqtt_callback(char* topic, byte* payload, unsigned int length);
-
 
 void setup() {
 
@@ -85,40 +51,20 @@ void setup() {
     digitalWrite(D8, LOW); 
  
   Serial.begin(115200);
- 
-  WiFi.begin(ssid, password);
- 
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.println("Connecting to WiFi..");
-  }
-  Serial.println("Connected to the WiFi network");
- 
-  client.setServer(mqttServer, mqttPort);
-  client.setCallback(callback);
- 
-  while (!client.connected()) {
-    Serial.println("Connecting to MQTT...");
- 
-    if (client.connect("ESP8266Client", mqttUser, mqttPassword )) {
- 
-      Serial.println("connected");  
- 
-    } else {
- 
-      Serial.print("failed with state ");
-      Serial.print(client.state());
-      delay(2000);
- 
-    }
-  }
-  
- 
+  wifi();
+  cloudmqtt();
+  //Manda mensagem
   client.publish("liga","desliga");
+  //topico que sera usado pelo nodeMCU
   client.subscribe("LED");
  
 }
- 
+
+ void loop() {
+  client.loop();
+  reconectarWifi();
+}
+
 void callback(char* topic, byte* payload, unsigned int length) {
  
   Serial.print("Message arrived in topic: ");
@@ -137,19 +83,13 @@ void callback(char* topic, byte* payload, unsigned int length) {
        char c = (char)payload[i];
        msg += c;
     }
-  
-
-        
+    
     //toma ação dependendo da string recebida:
     //verifica se deve colocar nivel alto de tensão na saída.
     //IMPORTANTE: o Led já contido na placa é acionado com lógica invertida (ou seja,
     //enviar HIGH para o output faz o Led apagar / enviar LOW faz o Led acender)
- 
- 
-    //verifica se deve colocar nivel alto de tensão na saída se enviar L e digito, ou nivel baixo se enviar D e digito no topíco LED
 
-    
-    
+    //verifica se deve colocar nivel alto de tensão na saída se enviar L e digito, ou nivel baixo se enviar D e digito no topíco LED
 
        if (msg.equals("L1"))
     {
@@ -276,6 +216,51 @@ void callback(char* topic, byte* payload, unsigned int length) {
  
 }
  
-void loop() {
-  client.loop();
+
+//conecta com o wifi
+void wifi(){
+  
+  WiFi.begin(ssid, password);
+ 
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.println("Conectando com o WiFi...");
+  }
+  Serial.print("Conectado com o ");
+  Serial.println(ssid);
 }
+
+//conecta com o wifi se perder conexão
+void reconectarWifi(){
+  if (WiFi.status() != WL_CONNECTED){
+    Serial.println("Conexão com wifi perdida");
+    WiFi.begin(ssid, password);
+    while (WiFi.status() != WL_CONNECTED) {
+      delay(1000);
+      Serial.println("Reconectando a o WiFi...");
+    }
+    Serial.print("Reconectando a o ");
+    Serial.println(ssid);
+    cloudmqtt();
+  }
+
+}
+//conecta com o cloudmqtt
+void cloudmqtt(){
+  client.setServer(mqttServer, mqttPort);
+  client.setCallback(callback);
+ 
+  while (!client.connected()) {
+    Serial.println("Conectando com o cloudmqtt...");
+ 
+    if (client.connect("ESP8266Client", mqttUser, mqttPassword )) {
+      Serial.println("Conectado a o cloudmqtt");  
+    } 
+    else {
+      Serial.println("Erro");
+      delay(2000);
+ 
+    }
+  }
+}
+  
